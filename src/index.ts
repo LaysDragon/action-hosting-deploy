@@ -36,7 +36,7 @@ import {
   getURLsMarkdownFromChannelDeployResult,
   postChannelSuccessComment,
 } from "./postOrUpdateComment";
-import { getProjectIdByAlias } from "./getProjectIdByAlias";
+import { getProjectIdByAlias, getTargetIdsByAlias } from "./getProjectIdByAlias";
 
 // Inputs defined in action.yml
 const expires = getInput("expires");
@@ -104,7 +104,7 @@ async function run() {
       // ProjectId may be an alias. Try to get the real project id from .firebaserc
       const parsedProjectId = getProjectIdByAlias(projectId) || projectId;
       const hostname = target
-        ? `${target}.web.app`
+        ? `${getTargetIdsByAlias(parsedProjectId, target)?.[0] ?? target}.web.app`
         : `${parsedProjectId}.web.app`;
       const url = `https://${hostname}/`;
 
